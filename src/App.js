@@ -10,36 +10,8 @@ import {
   Button,
   TextInput,
 } from "grommet";
-
 import mapGenerator from "./services/mapGenerator";
-
-const EntryForm = (props) => {
-  const [value, setValue] = useState({});
-  const onSubmit = ({ value }) => {
-    const { mapSize } = value;
-    props.mapSizeChanged(mapSize);
-  };
-
-  return (
-    <Form
-      value={value}
-      onSubmit={onSubmit}
-      onChange={(nextValue) => setValue(nextValue)}
-      onReset={() => {
-        setValue({});
-        props.mapSizeChanged(0);
-      }}
-    >
-      <FormField name="map-size-label" htmlfor="map-size" label="Map Size">
-        <TextInput id="map-size" name="mapSize" type="number" min="1" />
-      </FormField>
-      <Box direction="row" gap="medium">
-        <Button type="submit" primary label="Set Map Size" />
-        <Button type="reset" label="Reset" />
-      </Box>
-    </Form>
-  );
-};
+import MapSizeForm from "./components/MapSizeForm";
 
 const Map = (props) => {
   const { map } = props;
@@ -51,7 +23,10 @@ const Map = (props) => {
             border={{ color: "brand", size: "xsmall" }}
             margin="xxsmall"
             key={`map-row-${index}-col-${colIndex}`}
-          >{`${column.x}-${column.y}`}</Box>
+            background="url(/images/grasstile.png)"
+            height={{ min: "32px" }}
+            width={{ min: "32px" }}
+          ></Box>
         ))}
       </Box>
     );
@@ -59,7 +34,7 @@ const Map = (props) => {
 };
 
 function App() {
-  const [map, setMap] = React.useState(mapGenerator(4));
+  const [map, setMap] = useState(mapGenerator(4));
   const mapSizeChanged = (mapSize) => setMap(mapGenerator(mapSize));
 
   return (
@@ -78,7 +53,7 @@ function App() {
           PokePath
         </Header>
         <Box gridArea="nav" background="light-5">
-          <EntryForm mapSizeChanged={mapSizeChanged} />
+          <MapSizeForm mapSizeChanged={mapSizeChanged} mapSize={4} />
         </Box>
         <Box gridArea="main" background="light-2">
           <Map map={map}></Map>
