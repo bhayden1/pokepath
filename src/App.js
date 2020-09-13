@@ -21,10 +21,10 @@ import Steps from "./components/Steps";
 import Map from "./components/Map";
 
 function App() {
-  const [mapSize, setMapSize] = useState(5);
+  const [mapSize, setMapSize] = useState();
   const [map, setMap] = useState(mapGenerator(mapSize));
   const [path, setPath] = useState([]);
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [noWayHome, setNoWayHome] = useState(false);
   const [start, setStart] = useState({});
   const [end, setEnd] = useState({});
