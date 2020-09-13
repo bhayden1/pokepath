@@ -15,59 +15,63 @@ import {
   CardFooter,
 } from "grommet";
 import mapGenerator from "./services/mapGenerator";
-import payloadMapper from "./services/payloadMapper";
 import connectionMapper from "./services/connectionMapper";
+import api from "./services/api";
 import Steps from "./components/Steps";
 import Map from "./components/Map";
-import axios from "axios";
 
 function App() {
-  const [mapSize, setMapSize] = useState();
+  const [mapSize, setMapSize] = useState(5);
   const [map, setMap] = useState(mapGenerator(mapSize));
   const [path, setPath] = useState([]);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [noWayHome, setNoWayHome] = useState(false);
+  const [start, setStart] = useState({});
+  const [end, setEnd] = useState({});
+  const [impassables, setImpassables] = useState([]);
 
   const mapSizeChanged = (mapSize) => {
     setMapSize(mapSize);
     setMap(mapGenerator(mapSize));
     setStep(step + 1);
   };
+
   const mapClicked = (point, row, column) => {
     if (step === 2) {
       setStep(step + 1);
       point.start = true;
       map[row][column] = point;
-      setMap([...map]);
+      setMap([].concat(map));
+      setStart({ x: point.x, y: point.y });
     }
 
     if (step === 3) {
       point.end = true;
       map[row][column] = point;
       setStep(step + 1);
-      setMap([...map]);
+      setMap([].concat(map));
+      setEnd({ x: point.x, y: point.y });
     }
 
     if (step === 4) {
       point.blocked = !point.blocked;
       map[row][column] = point;
-      setMap([...map]);
+      setMap([].concat(map));
+      if (point.blocked) {
+        impassables.push(point);
+        setImpassables([].concat(impassables));
+      }
     }
   };
 
-  const goHome = () => {
-    const payload = payloadMapper(map, mapSize);
-    axios
-      .post("https://frozen-reef-96768.herokuapp.com/find-path", payload)
-      .then((resp) => resp.data.moves)
-      .then((moves) => {
-        setPath(connectionMapper(moves, payload.startingLoc));
-      })
-      .catch((err) => {
-        setPath([]);
-        setNoWayHome(true);
-        console.log(err);
-      });
+  const goHome = async () => {
+    try {
+      const moves = await api.getPathing(start, end, impassables, mapSize);
+      setPath(connectionMapper(moves, start));
+    } catch {
+      setPath([]);
+      setNoWayHome(true);
+    }
   };
 
   const reset = () => {
@@ -76,20 +80,20 @@ function App() {
     setPath([]);
     setNoWayHome(false);
   };
+
   return (
     <Grommet theme={grommet}>
       <Grid
         rows={["xxsmall", "100%"]}
         columns={["1/4", "flex"]}
         gap="small"
-        fill="true"
         areas={[
           { name: "header", start: [0, 0], end: [1, 0] },
           { name: "nav", start: [0, 1], end: [0, 1] },
           { name: "main", start: [1, 1], end: [1, 1] },
         ]}
       >
-        <Header background="brand" gridArea="header">
+        <Header background="brand" gridArea="header" data-testid="pageHeader">
           PokePath
         </Header>
         <Box gridArea="nav" background="light-5">
@@ -102,8 +106,8 @@ function App() {
           />
         </Box>
         <Box gridArea="main" background="light-2" height="100%">
-          <Stack fill="true" guidingChild={1}>
-            <Diagram connections={path} />
+          <Stack guidingChild={path.length > 0 ? 1 : 0} data-testid="map">
+            {path.length > 0 && <Diagram connections={path} />}
             <Map map={map} mapClicked={mapClicked} />
           </Stack>
         </Box>

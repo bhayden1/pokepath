@@ -1,23 +1,6 @@
 import React from "react";
-import { Button, Paragraph } from "grommet";
 import MapSizeForm from "./MapSizeForm";
-const renderLastStep = (goHome, reset) => (
-  <>
-    <Paragraph>Select Blocked Tiles</Paragraph>
-    <Button
-      primary
-      label="Get Bulbasaur Home"
-      data-testid="go-home-pokemon-button"
-      onClick={goHome}
-    />
-    <Button
-      secondary
-      label="Reset Map"
-      data-testid="reset-map"
-      onClick={reset}
-    />
-  </>
-);
+import Step from "./Step";
 
 const Steps = (props) => {
   const { step, mapSizeChanged, goHome, reset } = props;
@@ -26,9 +9,16 @@ const Steps = (props) => {
       {step === 1 && (
         <MapSizeForm mapSizeChanged={mapSizeChanged} mapSize={0} />
       )}
-      {step === 2 && <Paragraph>Select Start Tile</Paragraph>}
-      {step === 3 && <Paragraph>Select End Tile</Paragraph>}
-      {step === 4 && renderLastStep(goHome, reset)}
+      {step === 2 && <Step stepText="Select Start Tile" reset={reset} />}
+      {step === 3 && <Step stepText="Select End Tile" reset={reset} />}
+      {step === 4 && (
+        <Step
+          stepText="Select Blocked Tiles"
+          primaryAction={goHome}
+          primaryActionLabel="Get Bulbasaur Home"
+          reset={reset}
+        />
+      )}
     </>
   );
 };

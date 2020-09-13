@@ -35,7 +35,6 @@ const MapSizeForm = (props) => {
           label="Set Map Size"
           data-testid="change-map-size-button"
         />
-        {/* <Button type="reset" label="Reset" /> */}
       </Box>
     </Form>
   );

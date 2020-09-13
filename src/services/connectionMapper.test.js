@@ -26,14 +26,12 @@ test("should return connections for diagram", () => {
       toTarget: "map-row-1-col-0",
       thickness: "xsmall",
       color: "accent-2",
-      currentPosition: { x: 0, y: 1 },
     },
     {
       fromTarget: "map-row-1-col-0",
       toTarget: "map-row-1-col-1",
       thickness: "xsmall",
       color: "accent-2",
-      currentPosition: { x: 1, y: 1 },
     },
   ];
   const actual = connectionGenerator(moves, payload.startingLoc);
