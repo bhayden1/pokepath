@@ -24,7 +24,7 @@ const MapSizeForm = (props) => {
           id="map-size"
           name="mapSize"
           type="number"
-          min="1"
+          min="2"
           data-testid="change-map-size-input"
         />
       </FormField>

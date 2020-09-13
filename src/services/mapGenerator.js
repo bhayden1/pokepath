@@ -1,8 +1,8 @@
 export default (size) => {
   const map = [];
-  for (let x = 0; x < size; x++) {
+  for (let y = 0; y < size; y++) {
     const row = [];
-    for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
       const point = {
         x: x,
         y: y,
