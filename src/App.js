@@ -85,7 +85,7 @@ function App() {
     <Grommet theme={grommet}>
       <Grid
         rows={["xxsmall", "100%"]}
-        columns={["1/4", "flex"]}
+        columns={["15%", "auto"]}
         gap="small"
         areas={[
           { name: "header", start: [0, 0], end: [1, 0] },
