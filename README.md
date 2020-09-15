@@ -9,7 +9,9 @@ Deployed to Azure Static Websites via [Github Actions](https://github.com/bhayde
 ## Docker
 
 Docker file created to spin up easily.
+
 `docker build --tag pokepath .`
+
 `docker run -it -d -p 80:80 pokepath`
 
 ## Available Scripts
