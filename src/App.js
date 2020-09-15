@@ -73,6 +73,7 @@ function App() {
 
   const goHome = async () => {
     try {
+      setPath([]);
       const moves = await api.getPathing(start, end, impassables, mapSize);
       setPath(connectionMapper(moves, start));
     } catch {
