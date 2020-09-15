@@ -26,8 +26,8 @@ function App() {
   const [path, setPath] = useState([]);
   const [step, setStep] = useState(1);
   const [noWayHome, setNoWayHome] = useState(false);
-  const [start, setStart] = useState({});
-  const [end, setEnd] = useState({});
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
   const [impassables, setImpassables] = useState([]);
 
   const mapSizeChanged = (mapSize) => {
@@ -60,6 +60,13 @@ function App() {
       if (point.blocked) {
         impassables.push(point);
         setImpassables([].concat(impassables));
+      } else {
+        setImpassables(
+          impassables.filter(
+            (impassablePoint) =>
+              impassablePoint.x !== point.x && impassablePoint.y !== point.y
+          )
+        );
       }
     }
   };
@@ -78,6 +85,7 @@ function App() {
     setMap([]);
     setStep(1);
     setPath([]);
+    setMapSize();
     setNoWayHome(false);
   };
 
