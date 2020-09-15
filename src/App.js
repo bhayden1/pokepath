@@ -88,6 +88,7 @@ function App() {
     setPath([]);
     setMapSize();
     setNoWayHome(false);
+    setImpassables([]);
   };
 
   return (
